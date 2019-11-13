@@ -35,12 +35,10 @@
 	</tr>
 	<?php
 				include 'config/koneksi.php';
+				$no = 1;
 				$data =  mysqli_query($koneksi,"SELECT * FROM anggota");
 						while($d = mysqli_fetch_array($data)){
-				?>
 
-	<?php 
-	$no = 1;
 	if(mysqli_num_rows($data) > 0){
 		
 	 ?>
@@ -54,7 +52,7 @@
 		<td><?php echo $d['jurusan'];?></td>
 		<td><?php echo $d['asal_kampus'];?></td>
 		<td><?php echo $d['semester'];?></td>
-		<td><?php echo $d['foto'];?></td>
+		<td><img class="img-fluid" src="img/<?php echo $d['foto'];?>"/></td>
 		<td><button class="btn btn-secondary btn-sm" value="LUNAS" onclick="ket_lunas()">BAYAR!</button></a>
 			<!-- id hasil -->
 	<div id="hasil_lunas"></div>
@@ -67,8 +65,7 @@
 
 	</tr>
 
-	<?php $no ;
-	echo "tes";
+	<?php $no++ ;
 	}
 	}
 	?>

@@ -19,30 +19,52 @@
 
 <body>
 	
-<div class="container "> 
+<div class="container"> 
 <?php
 require_once('config/koneksi.php');
-if($_POST){
-	try {
-		$sql = "INSERT INTO anggota (nama,alamat,no_hp,email,tujuan,jurusan,asal_kampus,semester,foto) VALUES ('".$_POST['nama']."','".$_POST['alamat']."','".$_POST['no_hp']."','".$_POST['email']."','".$_POST['tujuan']."','".$_POST['jurusan']."','".$_POST['asal_kampus']."','".$_POST['semester']."','".$_POST['foto']."')";
-		if(!$koneksi->query($sql)){
-			echo $koneksi->error;
-			die();
-		}
 
-	} catch (Exception $e) {
-		echo $e;
-		die();
-	}
-	  echo "<script>
-	alert('Data berhasil di simpan');
-	window.location.href='index.php?page=index';
-	</script>";
-}
-?>
+if (isset($_POST['submit'])) {
+
+	$nama = $_POST['nama'];
+	$alamat = $_POST['alamat'];
+	$no_hp = $_POST['no_hp'];
+	$email = $_POST['email'];
+	$tujuan = $_POST['tujuan'];
+	$jurusan = $_POST['jurusan'];
+	$asal_kampus = $_POST['asal_kampus'];
+	$semester = $_POST['semester'];
+
+	$sumber = $_FILES['foto']['tmp_name'];
+	$target = 'img/';
+	$nama_gambar = $_FILES['foto']['name'];
+
+// die(var_dump());
+	// if untuk mengecek data
+	if ($nama = "" || $alamat = "" || $no_hp = "" || $email = "" || $tujuan = "" || $jurusan = "" || $asal_kampus = "" || $semester = "" ) { ?>
+		<script type="text/javascript">
+			alert("Inputan tidak boleh kosong");
+		</script>  
+	<?php
+	} else {
+
+		$move = move_uploaded_file($sumber, $target.$nama_gambar);
+		//if untuk menambah data
+		if ($move) {
+			mysqli_query("INSERT INTO anggota VALUES('$nama','$alamat','$no_hp','$email','$tujuan','$jurusan','$asal_kampus','$semester','$nama_gambar');");
+		?>
+			<script type="text/javascript">
+				alert("SELAMAT Anda Berhasil Melakukan Registrasi");
+				window.location.href="?page=index";
+			</script>
+	<?php } else { ?>
+			<script type="text/javascript">
+				alert("Gagal mengupload");
+			</script>
 	
+	<?php } } } ?>
+
 <div class="container ">
-<form method="post" action="regis.php" > 
+<form method="POST" action="" enctype="multipart/form-data"> 
 	<div class="container mt-5">		
 		<div class="col-md text-center">	
 			<h3>COCONUT</h3>
@@ -60,7 +82,7 @@ if($_POST){
 		</div>	
 	</div>
 <!-- FORM -->
-<form method="post" action="" >
+<form method="POST" action="" >
 	<div class="row pb-4 px-5 ">
 		<div class="col-md-2"></div>
 		<div class="col-md-2">
@@ -68,7 +90,7 @@ if($_POST){
 		</div>
 
 		<div class="col-md-4">
-			<input  class="form-control" type="text" name="nama" autofocus autocomplete="off">
+			<input  class="form-control" type="text" name="nama" required autofocus autocomplete="off">
 		</div>
 	</div>
 	<div class="row pb-4 px-5 ">
@@ -77,7 +99,7 @@ if($_POST){
 			<label>Alamat</label>
 		</div>
 		<div class="col-md-4">
-			<input  class="form-control" type="text" name="alamat" autocomplete="off">
+			<input  class="form-control" type="text" name="alamat" required autocomplete="off">
 		</div>	
 	</div>
 	<div class="row pb-4 px-5 ">
@@ -86,7 +108,7 @@ if($_POST){
 			<label>No Hp</label>
 		</div>
 		<div class="col-md-4">
-			<input  class="form-control" type="text" name="no_hp" autocomplete="off">
+			<input  class="form-control" type="text" name="no_hp" required autocomplete="off">
 		</div>	
 	</div>
 	<div class="row pb-4 px-5 ">
@@ -95,7 +117,7 @@ if($_POST){
 			<label>email</label>
 		</div>
 		<div class="col-md-4">
-			<input  class="form-control" type="text" name="email" autocomplete="off">
+			<input  class="form-control" type="text" name="email" required autocomplete="off">
 		</div>	
 	</div>
 	<div class="row pb-4 px-5 ">
@@ -104,7 +126,7 @@ if($_POST){
 			<label>Asal Kampus</label>
 		</div>
 		<div class="col-md-4">
-			<input  class="form-control" name="asal_kampus" type="text">
+			<input  class="form-control" name="asal_kampus" type="text" required>
 		</div>	
 	</div>
 	<div class="row pb-4 px-5 ">
@@ -113,7 +135,7 @@ if($_POST){
 			<label>Jurusan</label>
 		</div>
 		<div class="col-md-4">
-			<input class="form-control" name="jurusan" autocomplete>
+			<input class="form-control" name="jurusan" required autocomplete>
 		</div>
 
 	</div>
@@ -123,11 +145,11 @@ if($_POST){
 			<label>Semester</label>
 		</div>
 		<div class="col-md-2 ml-4">
-			<input class="form-check-input" type="radio" name="semester" value="1">
+			<input class="form-check-input" type="radio" name="semester" value="1" required>
 	 		<label class="form-check-label" for="inlineRadio1">1</label>
 		</div>
 		<div class="col-md-2 ml-4">
-			<input class="form-check-input" type="radio" name="semester" value="3">
+			<input class="form-check-input" type="radio" name="semester" value="3" required>
 	 		<label class="form-check-label" for="inlineRadio1">3</label>
 		</div>	
 	</div>
@@ -137,7 +159,7 @@ if($_POST){
 			<label>Tujuan Daftar</label>
 		</div>
 		<div class="col-md-4">
-			<textarea class="form-control" rows="3" name="tujuan"></textarea>
+			<textarea class="form-control" rows="3" name="tujuan" required></textarea>
 		</div>
 	</div>
 	<div class="row pb-4 px-5 ">
@@ -147,13 +169,8 @@ if($_POST){
 		</div>
 		<div class="col-md-4">
 			<div class="form-group">
-   				<input type="file" class="form-control-file" name="foto">
+   				<input type="file" class="form-control-file" name="foto" required>
   			</div>
-		</div>
-	</div>
-	<div class="row mt-5 justify-content-center">	
-		<div class="col-md-5 text-center">	
-			<label>Time Left</label>
 		</div>
 	</div>
 	<div class="row justify-content-center">	
@@ -168,7 +185,7 @@ if($_POST){
 	</div>
 	<div class="row mb-5 pb-4 px-5 justify-content-center">
 		<div class="col-md-5">
-		<button type="submit" name="join" class="btn btn-outline-primary btn-block">Join Now!</button>
+		<button type="submit" name="submit" class="btn btn-outline-primary btn-block">Join Now!</button>
 		</div>
 	</div>
 </form>
@@ -180,3 +197,4 @@ if($_POST){
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   </body>
 </html>
+
